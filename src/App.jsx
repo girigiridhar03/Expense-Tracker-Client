@@ -1,12 +1,7 @@
-import { Button } from "./components/ui/button";
+import AppRoutes from "./Routes/AppRoutes";
 
 const App = () => {
-  return (
-    <h1 className="text-3xl font-bold underline">
-      Hello world!
-      <Button>Hello</Button>
-    </h1>
-  );
+  return <AppRoutes />;
 };
 
 export default App;
