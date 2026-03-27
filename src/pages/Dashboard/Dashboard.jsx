@@ -9,7 +9,7 @@ import {
   getDashboardMetricCards,
 } from "@/store/Dashboard/dashboard.service";
 import { Activity, MoveDownRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const Dashboard = () => {
@@ -22,7 +22,6 @@ const Dashboard = () => {
     budgetOverview,
     metricCardsObj,
   } = useSelector((state) => state.dashboardReducer);
-  const [metricCardArr, setMetricCardArr] = useState([]);
 
   useEffect(() => {
     dispatch(getDashboardMetricCards());
@@ -30,19 +29,18 @@ const Dashboard = () => {
     dispatch(getDashboardCategories());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!metricCardsObj) return;
+  const metricCardArr = useMemo(() => {
+    if (!metricCardsObj) return [];
+    const EXCLUDED_KEYS = ["percentage", "totalTransactions"];
 
-    const arr = Object.keys(metricCardsObj)
-      .filter((item) => item !== "percentage")
+    return Object.keys(metricCardsObj)
+      .filter((item) => !EXCLUDED_KEYS.includes(item))
       .map((item) => ({ name: item, value: metricCardsObj[item] }));
-
-    setMetricCardArr(arr);
   }, [metricCardsObj]);
 
   return (
     <section>
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {metricCardArr?.map((item) => (
           <MetricCard
             key={item.name}

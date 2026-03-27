@@ -45,7 +45,7 @@ export function ChartPieDonutText({ data = [] }) {
 
   if (!chartData.length) {
     return (
-      <Card className="flex items-center justify-center h-[250px]">
+      <Card className="flex items-center justify-center h-62.5">
         <p className="text-muted-foreground">No data available</p>
       </Card>
     );

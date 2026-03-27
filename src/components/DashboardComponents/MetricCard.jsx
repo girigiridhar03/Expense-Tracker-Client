@@ -25,8 +25,8 @@ const METRIC_NAME = {
 };
 
 const NumVal = ({ showRupee = false, percentage = null, val }) => {
-  const value = val?.toLocaleString("en-IN")
-  if (showRupee && percentage && val) {
+  const value = val?.toLocaleString("en-IN");
+  if (showRupee && percentage !== null && val) {
     return (
       <p className="flex items-center gap-2">
         <span className="text-3xl">₹{value}</span>
@@ -45,8 +45,9 @@ const NumVal = ({ showRupee = false, percentage = null, val }) => {
 };
 
 const MetricCard = ({ name, amount, obj }) => {
-  const Icon = METRIC_NAME[name].icon;
-  const cardName = METRIC_NAME[name].name;
+  const Icon = METRIC_NAME?.[name]?.icon || ChartPie;
+  const cardName = METRIC_NAME?.[name]?.name || "Unknown";
+
   return (
     <Card
       className="group bg-linear-to-b from-white/5 to-white/2
@@ -70,16 +71,19 @@ const MetricCard = ({ name, amount, obj }) => {
       </CardHeader>
       <CardContent className="flex flex-col gap-1.5">
         {name !== "remaining" ? (
-          <NumVal showRupee={METRIC_NAME[name].showRupee} val={amount} />
+          <NumVal showRupee={METRIC_NAME?.[name]?.showRupee} val={amount} />
         ) : (
           <NumVal
-            showRupee={METRIC_NAME[name].showRupee}
-            percentage={obj.percentage || null}
+            showRupee={METRIC_NAME?.[name]?.showRupee}
+            percentage={obj?.percentage || null}
             val={amount}
           />
         )}
-
-        {/* <p className="text-[0.8rem]">5 transactions this month</p> */}
+        {name === "totalSpent" && obj?.totalTransactions && (
+          <p className="text-[0.8rem]">
+            {obj?.totalTransactions} transactions this month
+          </p>
+        )}
       </CardContent>
     </Card>
   );
