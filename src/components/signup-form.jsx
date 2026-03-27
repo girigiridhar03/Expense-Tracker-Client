@@ -13,17 +13,20 @@ import {
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import { Lock, Mail, User } from "lucide-react";
+import { Loader2, Lock, Mail, User } from "lucide-react";
 import { CustomInput } from "./ui/CustomInput";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-export function SignupForm({ className, ...props }) {
-  const { pathname } = useLocation();
-
-  const isRegister = pathname === "/register";
-
+export function SignupForm({
+  className,
+  isRegister,
+  formData,
+  onHandleChange,
+  onSubmit,
+  authLoading,
+}) {
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
+    <div className={cn("flex flex-col gap-6", className)}>
       <Card className="relative flex min-h-155 flex-col gap-8 overflow-hidden rounded-[30px] border border-white/12 bg-slate-950/58 px-3 py-3 text-slate-100 shadow-[0_18px_60px_rgba(2,6,23,0.55)] ring-1 ring-cyan-300/10 backdrop-blur-xl">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(34,211,238,0.08),transparent_28%,transparent_72%,rgba(96,165,250,0.08))]" />
         <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-linear-to-r from-transparent via-cyan-200/50 to-transparent" />
@@ -41,7 +44,7 @@ export function SignupForm({ className, ...props }) {
           </CardDescription>
         </CardHeader>
         <CardContent className="relative flex-1 px-6 pb-8">
-          <form className="h-full">
+          <form className="h-full" onSubmit={onSubmit}>
             <FieldGroup className="h-full gap-5">
               {isRegister && (
                 <Field>
@@ -54,6 +57,9 @@ export function SignupForm({ className, ...props }) {
                   <CustomInput
                     id="name"
                     type="text"
+                    name="username"
+                    value={formData.username}
+                    onChange={onHandleChange}
                     placeholder="John Doe"
                     icon={User}
                     required
@@ -71,6 +77,9 @@ export function SignupForm({ className, ...props }) {
                 <CustomInput
                   id="email"
                   type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={onHandleChange}
                   placeholder="m@example.com"
                   icon={Mail}
                   required
@@ -87,6 +96,9 @@ export function SignupForm({ className, ...props }) {
                   <CustomInput
                     id="password"
                     type="password"
+                    name="password"
+                    value={formData.password}
+                    onChange={onHandleChange}
                     placeholder="Enter your password"
                     icon={Lock}
                     required
@@ -99,9 +111,26 @@ export function SignupForm({ className, ...props }) {
               <Field className="mt-2 gap-4">
                 <Button
                   type="submit"
-                  className="h-12 rounded-2xl border border-cyan-300/40 bg-linear-to-r from-cyan-400 via-sky-400 to-indigo-400 text-slate-950 shadow-[0_12px_30px_rgba(34,211,238,0.26)] transition-transform duration-200 hover:-translate-y-0.5 hover:brightness-110"
+                  disabled={authLoading}
+                  className={`h-12 rounded-2xl border border-cyan-300/40 bg-linear-to-r from-cyan-400 via-sky-400 to-indigo-400 text-slate-950 shadow-[0_12px_30px_rgba(34,211,238,0.26)] transition-transform duration-200 hover:-translate-y-0.5 hover:brightness-110 ${authLoading ? "cursor-not-allowed" : "cursor-pointer"}`}
                 >
-                  {isRegister ? "Create Account" : "Sign In"}
+                  {isRegister ? (
+                    authLoading ? (
+                      <div className="flex items-center gap-1">
+                        <Loader2 className="animate-spin" />
+                        <span>Create Account</span>
+                      </div>
+                    ) : (
+                      "Create Account"
+                    )
+                  ) : authLoading ? (
+                    <div className="flex items-center gap-1">
+                      <Loader2 className="animate-spin" />
+                      <span>Signing...</span>
+                    </div>
+                  ) : (
+                    "Sign In"
+                  )}
                 </Button>
                 <FieldDescription className="text-center text-slate-300/75 [&>a]:font-medium [&>a]:text-cyan-200 [&>a:hover]:text-cyan-100">
                   {isRegister ? (

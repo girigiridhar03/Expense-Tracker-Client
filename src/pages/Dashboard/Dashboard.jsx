@@ -1,3 +1,4 @@
+import { ChartPieDonutText } from "@/components/DashboardComponents/ChartPieDonutText";
 import MetricCard from "@/components/DashboardComponents/MetricCard";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -14,8 +15,15 @@ const Dashboard = () => {
         <MetricCard name={"Total Spent"} icon={MoveDownRight} amount={30000} />
       </div>
 
-      <div className="grid grid-cols-[2fr_1fr] gap-8 mt-10">
-        <Card className="p-5 hover:border-ring hover:border transition-all ease-in">
+      <div className="grid grid-cols-[2fr_1fr] gap-10 mt-10">
+        <Card
+          className="p-5 group bg-linear-to-b from-white/5 to-white/2
+             ring-1 ring-white/10
+             border border-white/10
+             shadow-[0_0_30px_rgba(0,0,0,0.3)]
+             backdrop-blur-xl
+             transition-all duration-300 ease-in relative hover:border hover:border-ring"
+        >
           <CardHeader className="flex items-center gap-3">
             <span className="text-ring">
               <Activity />
@@ -41,12 +49,12 @@ const Dashboard = () => {
             </div>
             <Separator />
             <div className="my-3 flex flex-col gap-1">
-                <p className="opacity-50 text-[1rem]" >Allocated to Categories</p>
-                <p className="font-semibold text-[0.95rem]" >₹19,000</p>
+              <p className="opacity-50 text-[1rem]">Allocated to Categories</p>
+              <p className="font-semibold text-[0.95rem]">₹19,000</p>
             </div>
           </CardContent>
         </Card>
-        <Card></Card>
+        <ChartPieDonutText />
       </div>
     </section>
   );

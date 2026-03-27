@@ -13,16 +13,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 const Mainlayout = () => {
- 
- const [open,setOpen] = useState(true)
-
   return (
-    <SidebarProvider open={open} onOpenChange={setOpen} >
-      <AppSidebar open={open} />
+    <SidebarProvider defaultOpen={true}>
+      <AppSidebar />
       <SidebarInset>
         <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
           <div className="flex items-center gap-2 px-4">

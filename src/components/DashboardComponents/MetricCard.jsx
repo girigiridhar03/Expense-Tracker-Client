@@ -1,4 +1,25 @@
+import { Activity, ChartPie, MoveDownRight, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
+
+
+const METRIC_NAME = {
+  totalSpent: {
+    name: "Total Spent",
+    icon: MoveDownRight,
+  },
+  monthlyBudget: {
+    name: "Monthly Budget",
+    icon: Wallet,
+  },
+  remaining: {
+    name: "Remaining",
+    icon: Activity,
+  },
+  categoriesUsed: {
+    name: "Categories Used",
+    icon: ChartPie,
+  },
+};
 
 const MetricCard = ({ name, icon: Icon, amount }) => {
   return (
@@ -22,7 +43,7 @@ const MetricCard = ({ name, icon: Icon, amount }) => {
         </span>
         <span className="text-secondary">{name}</span>
       </CardHeader>
-      <CardContent className="flex flex-col gap-1.5" >
+      <CardContent className="flex flex-col gap-1.5">
         <p className="text-3xl">₹{amount}</p>
         <p className="text-[0.8rem]">5 transactions this month</p>
       </CardContent>
