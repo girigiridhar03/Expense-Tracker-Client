@@ -1,27 +1,52 @@
 import { Activity, ChartPie, MoveDownRight, Wallet } from "lucide-react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 
-
 const METRIC_NAME = {
   totalSpent: {
     name: "Total Spent",
     icon: MoveDownRight,
+    showRupee: true,
   },
   monthlyBudget: {
     name: "Monthly Budget",
     icon: Wallet,
+    showRupee: true,
   },
   remaining: {
     name: "Remaining",
     icon: Activity,
+    showRupee: true,
   },
   categoriesUsed: {
     name: "Categories Used",
     icon: ChartPie,
+    showRupee: false,
   },
 };
 
-const MetricCard = ({ name, icon: Icon, amount }) => {
+const NumVal = ({ showRupee = false, percentage = null, val }) => {
+  const value = val?.toLocaleString("en-IN")
+  if (showRupee && percentage && val) {
+    return (
+      <p className="flex items-center gap-2">
+        <span className="text-3xl">₹{value}</span>
+        <span
+          className={`${percentage > 0 ? "text-green-500" : "text-red-500"}`}
+        >
+          {percentage > 0 ? `+${percentage}%` : `-${percentage}%`}
+        </span>
+      </p>
+    );
+  } else if (showRupee && val) {
+    return <p className="text-3xl">₹{value}</p>;
+  } else {
+    return <p className="text-3xl">{value}</p>;
+  }
+};
+
+const MetricCard = ({ name, amount, obj }) => {
+  const Icon = METRIC_NAME[name].icon;
+  const cardName = METRIC_NAME[name].name;
   return (
     <Card
       className="group bg-linear-to-b from-white/5 to-white/2
@@ -41,11 +66,20 @@ const MetricCard = ({ name, icon: Icon, amount }) => {
         <span className="text-primary bg-[#242428] h-8 w-8 rounded flex items-center justify-center">
           <Icon className="h-6 w-6" />
         </span>
-        <span className="text-secondary">{name}</span>
+        <span className="text-secondary">{cardName}</span>
       </CardHeader>
       <CardContent className="flex flex-col gap-1.5">
-        <p className="text-3xl">₹{amount}</p>
-        <p className="text-[0.8rem]">5 transactions this month</p>
+        {name !== "remaining" ? (
+          <NumVal showRupee={METRIC_NAME[name].showRupee} val={amount} />
+        ) : (
+          <NumVal
+            showRupee={METRIC_NAME[name].showRupee}
+            percentage={obj.percentage || null}
+            val={amount}
+          />
+        )}
+
+        {/* <p className="text-[0.8rem]">5 transactions this month</p> */}
       </CardContent>
     </Card>
   );
