@@ -79,7 +79,7 @@ const MetricCard = ({ name, amount, obj }) => {
             val={amount}
           />
         )}
-        {name === "totalSpent" && obj?.totalTransactions && (
+        {name === "totalSpent" && obj?.totalTransactions > 0 && (
           <p className="text-[0.8rem]">
             {obj?.totalTransactions} transactions this month
           </p>

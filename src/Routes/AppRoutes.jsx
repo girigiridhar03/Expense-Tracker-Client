@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { ProtectedRoute, PublicRoute } from "./RouteGuards";
+import Transactions from "@/pages/Transactions";
 
 const AppRoutes = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ const AppRoutes = () => {
       <Route element={<ProtectedRoute />}>
         <Route element={<Mainlayout />}>
           <Route path="/" element={<Dashboard />} />
+          <Route path="/expenses" element={<Transactions />} />
         </Route>
       </Route>
     </Routes>

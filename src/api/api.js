@@ -15,7 +15,6 @@ api.interceptors.response.use(
     const requestUrl = error.config?.url || "";
     const isAuthCheck = requestUrl.includes("/auth/check");
     const isAuthPage = ["/login", "/register"].includes(window.location.pathname);
-
     if (error.response?.status === 401 && !isAuthCheck && !isAuthPage) {
       window.location.href = "/login";
     }

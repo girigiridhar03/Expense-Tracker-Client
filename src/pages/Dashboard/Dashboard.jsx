@@ -51,7 +51,9 @@ const Dashboard = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-[2fr_1fr] gap-10 mt-10">
+      <div
+        className={`grid ${categoriesStatArr?.lenght > 0 ? "grid-cols-[2fr_1fr]" : "grid-cols[3fr]"} gap-10 mt-10`}
+      >
         <Card
           className="p-5 group bg-linear-to-b from-white/5 to-white/2
              ring-1 ring-white/10
@@ -98,7 +100,9 @@ const Dashboard = () => {
             </div>
           </CardContent>
         </Card>
-        <ChartPieDonutText data={categoriesStatArr} />
+        {categoriesStatArr?.lenght > 0 && (
+          <ChartPieDonutText data={categoriesStatArr} />
+        )}
       </div>
     </section>
   );
