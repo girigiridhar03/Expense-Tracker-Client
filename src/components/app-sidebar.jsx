@@ -9,11 +9,9 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
-  LayoutDashboard,
   IndianRupee,
+  LayoutDashboard,
   PlusCircle,
-  Wallet,
-  Tag,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 
@@ -23,7 +21,6 @@ const data = {
       title: "Dashboard",
       url: "/",
       icon: <LayoutDashboard />,
-      isActive: true,
     },
     {
       title: "Transactions",
@@ -35,43 +32,42 @@ const data = {
       url: "/add-expense",
       icon: <PlusCircle />,
     },
-    {
-      title: "Budgets",
-      url: "/budgets",
-      icon: <Wallet />,
-    },
-    {
-      title: "Categories",
-      url: "/categories",
-      icon: <Tag />,
-    },
   ],
 };
 
 export function AppSidebar({ ...props }) {
   const { state, isMobile, openMobile } = useSidebar();
   const isExpanded = isMobile ? openMobile : state === "expanded";
-  const { user, authLoading } = useSelector((state) => state.authReducer);
+  const { user } = useSelector((state) => state.authReducer);
 
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-slate-200/70 bg-[linear-gradient(180deg,#06131f_0%,#0f172a_58%,#111827_100%)] text-slate-100"
+      {...props}
+    >
       <SidebarHeader
         className={`overflow-hidden transition-all duration-300 ease-in-out ${
           isExpanded
-            ? "max-h-40 translate-y-0 opacity-100"
+            ? "max-h-48 translate-y-0 opacity-100"
             : "pointer-events-none max-h-0 -translate-y-2 opacity-0 p-0"
         }`}
       >
         <div
-          className={`rounded-2xl border border-white/10 bg-linear-to-b from-white/5 to-white/2 shadow-[0_0_30px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-300 ease-in-out ${
+          className={`rounded-[26px] border border-white/10 bg-linear-to-br from-sky-400/15 via-white/5 to-emerald-300/10 shadow-[0_20px_50px_rgba(0,0,0,0.3)] backdrop-blur-xl transition-all duration-300 ease-in-out ${
             isExpanded ? "scale-100 p-6" : "scale-95 p-0"
           }`}
         >
-          <p className="text-muted-foreground text-sm tracking-wide">
+          <p className="text-sm tracking-[0.28em] text-slate-300/70">
             WELCOME BACK
           </p>
 
-          <h2 className="mt-2 text-2xl font-semibold text-white">Giridhar</h2>
+          <h2 className="mt-3 text-2xl font-semibold text-white">
+            {user?.username || "Expense Pilot"}
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-slate-300/75">
+            Keep your money decisions clear, current, and measurable.
+          </p>
         </div>
       </SidebarHeader>
 
@@ -79,7 +75,7 @@ export function AppSidebar({ ...props }) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <NavUser user={user || {}} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

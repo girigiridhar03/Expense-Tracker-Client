@@ -1,4 +1,5 @@
 import Auth from "@/pages/auth/Auth";
+import AddExpense from "@/pages/AddExpense";
 import Dashboard from "@/pages/Dashboard/Dashboard";
 import Mainlayout from "@/pages/Main/Mainlayout";
 import { authCheck } from "@/store/auth/auth.service";
@@ -25,6 +26,7 @@ const AppRoutes = () => {
         <Route element={<Mainlayout />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/expenses" element={<Transactions />} />
+          <Route path="/add-expense" element={<AddExpense />} />
         </Route>
       </Route>
     </Routes>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChartPie } from "lucide-react";
+import { ChartPie, Dot } from "lucide-react";
 import { Label, Pie, PieChart } from "recharts";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,31 +10,29 @@ import {
 } from "@/components/ui/chart";
 
 export function ChartPieDonutText({ data = [] }) {
-
   const chartData = React.useMemo(() => {
     if (!data?.length) return [];
 
     return data.map((item) => ({
-      browser: item.name,
-      visitors: item.totalAmount,
+      label: item.name,
+      value: item.totalAmount,
       fill: item.color,
     }));
   }, [data]);
 
-
-  const totalVisitors = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.visitors, 0);
-  }, [chartData]);
-
+  const totalVisitors = React.useMemo(
+    () => chartData.reduce((acc, curr) => acc + curr.value, 0),
+    [chartData],
+  );
 
   const chartConfig = React.useMemo(() => {
     const config = {
-      visitors: { label: "Amount" },
+      value: { label: "Amount" },
     };
 
     chartData.forEach((item) => {
-      config[item.browser] = {
-        label: item.browser,
+      config[item.label] = {
+        label: item.label,
         color: item.fill,
       };
     });
@@ -42,33 +40,26 @@ export function ChartPieDonutText({ data = [] }) {
     return config;
   }, [chartData]);
 
-
   if (!chartData.length) {
     return (
-      <Card className="flex items-center justify-center h-62.5">
+      <Card className="glass-panel flex h-62.5 items-center justify-center rounded-[30px] border">
         <p className="text-muted-foreground">No data available</p>
       </Card>
     );
   }
 
   return (
-    <Card
-      className="flex flex-col group bg-linear-to-b from-white/5 to-white/2
-      ring-1 ring-white/10 border border-white/10
-      shadow-[0_0_30px_rgba(0,0,0,0.3)]
-      backdrop-blur-xl transition-all duration-300 ease-in
-      relative hover:border hover:border-ring"
-    >
+    <Card className="glass-panel relative flex flex-col rounded-[30px] border p-1 transition-all duration-300 ease-in hover:-translate-y-1">
       <CardHeader className="items-center pb-0">
-        <CardTitle className="flex items-center gap-3">
-          <span className="text-ring">
+        <CardTitle className="flex items-center gap-3 text-white">
+          <span className="rounded-2xl bg-sky-400/10 p-3 text-sky-300">
             <ChartPie />
           </span>
-          <span className="font-semibold text-lg">Spending by Category</span>
+          <span className="text-lg font-semibold">Spending by Category</span>
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex flex-1 flex-col gap-5 pb-6">
         <ChartContainer
           config={chartConfig}
           className="mx-auto aspect-square max-h-62"
@@ -81,9 +72,9 @@ export function ChartPieDonutText({ data = [] }) {
 
             <Pie
               data={chartData}
-              dataKey="visitors"
-              nameKey="browser"
-              innerRadius={60}
+              dataKey="value"
+              nameKey="label"
+              innerRadius={70}
               strokeWidth={5}
             >
               <Label
@@ -96,16 +87,13 @@ export function ChartPieDonutText({ data = [] }) {
                         textAnchor="middle"
                         dominantBaseline="middle"
                       >
-                        {/* Total */}
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
                           className="fill-foreground text-3xl font-bold"
                         >
-                          {totalVisitors.toLocaleString()}
+                          ₹{totalVisitors.toLocaleString("en-IN")}
                         </tspan>
-
-                        {/* Label */}
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy + 24}
@@ -116,11 +104,30 @@ export function ChartPieDonutText({ data = [] }) {
                       </text>
                     );
                   }
+
+                  return null;
                 }}
               />
             </Pie>
           </PieChart>
         </ChartContainer>
+
+        <div className="grid gap-3">
+          {chartData.map((item) => (
+            <div
+              key={item.label}
+              className="flex items-center justify-between rounded-2xl border border-white/6 bg-white/[0.03] px-4 py-3"
+            >
+              <div className="flex items-center gap-2 text-sm font-medium text-slate-300">
+                <Dot className="h-5 w-5" style={{ color: item.fill }} />
+                <span>{item.label}</span>
+              </div>
+              <span className="text-sm font-semibold text-white">
+                ₹{item.value.toLocaleString("en-IN")}
+              </span>
+            </div>
+          ))}
+        </div>
       </CardContent>
     </Card>
   );
